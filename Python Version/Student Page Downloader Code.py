@@ -6,19 +6,21 @@ import os
 PAGES_PATH = os.getcwd() + '/student_pages/'
 
 
-
 def check_seat_num(seat_num):
     if os.path.exists(PAGES_PATH+f'{seat_num}.html'):
-        print(f'{seat_num} already downloaded.')
+        print('Already downloaded.')
         return 1
     response = requests.get(f'https://shbabbek.com/natega/{seat_num}')
     soup = BeautifulSoup(response.content)
-    valid = (soup.find('p',attrs={'style':"font-size: 14px;color: red; margin-top: 11px;"}).text=='')
+
+    valid = (soup.find(text='تأكد من رقم الجلوس')==None)
+
     if valid:
-        print(seat_num+'valid')
+        print('Valid')
         with open(PAGES_PATH+f'{seat_num}.html', 'wb') as f:
             f.write(response.content)
-    else: print(seat_num+' invalid')
+    else:
+        print('Invalid')
     return 0
 
 
